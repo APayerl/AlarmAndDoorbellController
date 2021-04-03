@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AlarmFragment" >
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/alarm_state_headline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="My Alarm"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/alarm_green"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:paddingBottom="15sp"
+        android:typeface="sans" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/alarm_state_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:contentDescription="alarm state descriptor"
+        android:src="@drawable/ic_lock_circle_open_green" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/alarm_state_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/alarm_disarmed"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/alarm_green"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

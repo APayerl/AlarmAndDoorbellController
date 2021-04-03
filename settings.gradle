@@ -1,0 +1,3 @@
+include ':HAWS'
+include ':app'
+rootProject.name = "Alarm and Doorbell Controller"

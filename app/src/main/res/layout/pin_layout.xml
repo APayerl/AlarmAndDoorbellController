@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="1" >
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewNumberPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:clickable="false"
+            android:focusable="false"
+            android:inputType="numberPassword"
+            android:textSize="80sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="80sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="2"
+            android:textSize="80sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="3"
+            android:textSize="80sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="4"
+            android:textSize="80sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="5"
+            android:textSize="80sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="6"
+            android:textSize="80sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="7"
+            android:textSize="80sp"
+            tools:layout_editor_absoluteX="427dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn8"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="8"
+            android:textSize="80sp"
+            tools:layout_editor_absoluteX="570dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="9"
+            android:textSize="80sp"
+            tools:layout_editor_absoluteX="712dp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewNegative"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/alarm_red"
+            android:gravity="center"
+            android:text="@string/menu_password_cancel"
+            android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewBtn0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0"
+            android:textSize="80sp"
+            tools:layout_editor_absoluteX="143dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pinViewPositive"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/alarm_green"
+            android:gravity="center"
+            android:text="@string/menu_password_positive"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="285dp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,0 +1,49 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/preference_category_home_assistant">
+        <EditTextPreference
+            app:key="@string/settings_home_assistant_ws_url"
+            app:title="@string/preference_home_assistant_ws_url_title"
+            app:summary="@string/preference_home_assistant_ws_url_summary"
+            app:defaultValue="ws://homeassistant.local:8123/api/websocket" />
+        <EditTextPreference
+            app:key="@string/settings_home_assistant_token"
+            app:title="@string/preference_home_assistant_token_title"
+            app:summary="@string/preference_home_assistant_token_summary"
+            app:defaultValue="" />
+    </PreferenceCategory>
+    <PreferenceCategory app:key="cameras"
+        app:allowDividerAbove="true"
+        app:title="@string/preference_category_doorbell">
+
+        <PreferenceCategory
+            app:key="camera"
+            app:title="Camera">
+
+            <SwitchPreference
+                app:key="camera.doorbellEnabled"
+                app:title="@string/preference_doorbell_enabled"
+                app:defaultValue="true" />
+            <EditTextPreference
+                app:dependency="camera.doorbellEnabled"
+                app:key="camera.@string/settings_video_url"
+                app:title="@string/preference_url_field_title"
+                app:summary="@string/preference_url_field_summary"
+                app:defaultValue="" />
+            <SwitchPreference
+                app:dependency="camera.doorbellEnabled"
+                app:key="camera.authenticationRequired"
+                app:title="Authentication required"
+                app:defaultValue="true" />
+            <EditTextPreference
+                app:dependency="camera.authenticationRequired"
+                app:key="camera.username"
+                app:title="@string/preference_username_field_title"
+                app:defaultValue="admin" />
+            <EditTextPreference
+                app:dependency="camera.authenticationRequired"
+                app:key="camera.password"
+                app:title="@string/preference_password_field_title"
+                app:defaultValue="admin" />
+        </PreferenceCategory>
+    </PreferenceCategory>
+</PreferenceScreen>

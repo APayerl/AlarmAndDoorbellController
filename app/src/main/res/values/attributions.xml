@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lock_icon_closed_url">https://www.iconfinder.com/icons/314692/lock_icon</string>
+    <string name="lock_icon_closed_author">Yannick Lung</string>
+
+    <string name="lock_icon_opened_url">https://www.iconfinder.com/icons/314693/icon_lock_open_icon</string>
+    <string name="lock_icon_opened_author">Yannick Lung</string>
+
+    <string name="notifications_active_url">https://material.io/resources/icons/?search=bell&amp;icon=notifications_active&amp;style=baseline</string>
+    <string name="notifications_active_author">material.io</string>
+</resources>
