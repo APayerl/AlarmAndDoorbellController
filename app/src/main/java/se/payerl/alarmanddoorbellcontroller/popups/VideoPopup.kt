@@ -10,18 +10,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatImageView
 import se.payerl.alarmanddoorbellcontroller.R
 import se.payerl.alarmanddoorbellcontroller.VideoHandler
+import se.payerl.alarmanddoorbellcontroller.VideoHandler2
+import se.payerl.alarmanddoorbellcontroller.datatypes.CameraPreference
+import se.payerl.alarmanddoorbellcontroller.datatypes.Flags
 
-
-class VideoPopup(context: Context, private val mUrl: String, private val videoHandler: VideoHandler) {
+class VideoPopup(context: Context, private val preference: CameraPreference) {
     private var alertDialog: AlertDialog
     private val videoView: TextureView
-//    private var mUrl = url
     private var mProgressBar: ProgressBar
+    private var videoHandler: VideoHandler2
 
     init {
         val baseView = View.inflate(context, R.layout.video_layout, null)
         this.videoView = baseView.findViewById<TextureView>(R.id.video_view2)
         this.mProgressBar = baseView.findViewById<ProgressBar>(R.id.progressBar)
+        this.videoHandler = VideoHandler2(context, preference)
 
         val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
         alertDialogBuilder.setView(baseView)
@@ -34,8 +37,8 @@ class VideoPopup(context: Context, private val mUrl: String, private val videoHa
         })
     }
 
-    fun show(url: String = mUrl) {
-        alertDialog.window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE)
+    fun show() {
+        alertDialog.window?.decorView?.systemUiVisibility = Flags.HIDE_NAVBAR_AND_STATUSBAR
         alertDialog.show()
 
         alertDialog.window?.setLayout(
@@ -43,14 +46,18 @@ class VideoPopup(context: Context, private val mUrl: String, private val videoHa
             WindowManager.LayoutParams.MATCH_PARENT
         );
 
-        val dm = DisplayMetrics()
-        alertDialog.window?.windowManager?.defaultDisplay?.getMetrics(dm)
+        if(this.videoHandler.isPaused()) {
+            this.videoHandler.play()
+        } else {
+            val dm = DisplayMetrics()
+            alertDialog.window?.windowManager?.defaultDisplay?.getMetrics(dm)
 
-        this.videoHandler.show(dm.widthPixels, dm.heightPixels, this.videoView, url, mProgressBar)
+            this.videoHandler.play(dm.widthPixels, dm.heightPixels, this.videoView, preference.getVideoUrl(), mProgressBar)
+        }
     }
 
     fun hide() {
-        this.videoHandler.stop()
+        this.videoHandler.pause()
         alertDialog.hide()
     }
 

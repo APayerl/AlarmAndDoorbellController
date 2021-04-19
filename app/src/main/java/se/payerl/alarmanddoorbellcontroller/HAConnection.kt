@@ -17,7 +17,9 @@ class HAConnection private constructor(uri: URI, token: String): HomeAssistantWS
         private var instance: HAConnection? = null
 
         fun getInstance(uri: URI, token: String): HAConnection {
-            if(instance == null) instance = HAConnection(uri, token)
+            if(instance == null) {
+                instance = HAConnection(uri, token)
+            }
             return instance!!
         }
     }
@@ -46,7 +48,7 @@ class HAConnection private constructor(uri: URI, token: String): HomeAssistantWS
     }
 
     override fun onAuthOk() {
-        Log.v("HAConn/AuthOk", "AuthOk")
+//        Log.v("HAConn/AuthOk", "AuthOk")
         synchronized(this.ready) {
             this.ready = true
         }
@@ -59,14 +61,13 @@ class HAConnection private constructor(uri: URI, token: String): HomeAssistantWS
     }
 
     override fun onResult(resultMessage: ResultMessage?) {
-        System.out.println("recived in onResult")
-        Log.d("HAConn/Result", Jackson.get(true).writeValueAsString(resultMessage))
+//        Log.d("HAConn/Result", Jackson.get(true).writeValueAsString(resultMessage))
         (myRequests.get(resultMessage?.id) as ServerCallback<ResultMessage>).onReceived(resultMessage)
     }
 
     override fun onSubscriptionMessage(message: SubscriptionMessage?) {
         if(message?.event?.data?.entityId?.startsWith("alarm_control_panel")!!) {
-            Log.d("HAConn/Subscription", Jackson.get(true).writeValueAsString(message))
+//            Log.d("HAConn/Subscription", Jackson.get(true).writeValueAsString(message))
             EventBus.getDefault().post(message)
         }
     }

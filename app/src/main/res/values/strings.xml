@@ -17,11 +17,8 @@
     <string name="preference_home_assistant_token_summary">Token used for auth.</string>
     <string name="preference_category_home_assistant">Home Assistant</string>
 
-    <string name="settings_video_url">video_url</string>
     <string name="settings_home_assistant_token">home_assistant_token</string>
     <string name="settings_home_assistant_ws_url">home_assistant_ws_url</string>
-    <string name="settings_video_username">username</string>
-    <string name="settings_video_password">password</string>
 
     <string name="alarm_disarm">Disarm</string>
     <string name="alarm_disarmed">Disarmed</string>
@@ -38,7 +35,4 @@
     <string name="menu_password_positive">Validate</string>
     <string name="menu_password_cancel">Cancel</string>
     <string name="menu_password_invalid">PIN invalid!</string>
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

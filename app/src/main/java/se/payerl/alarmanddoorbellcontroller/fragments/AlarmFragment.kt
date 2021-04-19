@@ -1,4 +1,4 @@
-package se.payerl.alarmanddoorbellcontroller
+package se.payerl.alarmanddoorbellcontroller.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +15,10 @@ import androidx.gridlayout.widget.GridLayout
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import se.payerl.alarmanddoorbellcontroller.HAConnection
+import se.payerl.alarmanddoorbellcontroller.R
 import se.payerl.alarmanddoorbellcontroller.datatypes.AlarmStates
+import se.payerl.alarmanddoorbellcontroller.datatypes.Flags
 import se.payerl.alarmanddoorbellcontroller.datatypes.IconColor
 import se.payerl.alarmanddoorbellcontroller.datatypes.Jackson
 import se.payerl.alarmanddoorbellcontroller.popups.PasswordPopup
@@ -44,14 +47,18 @@ class AlarmFragment : Fragment() {
 
 
     private val closedGray = IconColor(R.drawable.ic_lock_circle_closed_gray, R.color.alarm_gray)
-    private val closedYellow = IconColor(R.drawable.ic_lock_circle_closed_yellow, R.color.alarm_yellow)
+    private val closedYellow = IconColor(
+        R.drawable.ic_lock_circle_closed_yellow,
+        R.color.alarm_yellow
+    )
     private val closedRed = IconColor(R.drawable.ic_lock_circle_closed_red, R.color.alarm_red)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             this.data = Jackson.get(true).readValue(it.getString(ALARM_DATA), Result::class.java)
-            this.hac = HAConnection.getInstance(URI(it.getString(URI_STRING)), it.getString(TOKEN)!!)
+            this.hac =
+                HAConnection.getInstance(URI(it.getString(URI_STRING)), it.getString(TOKEN)!!)
         }
         synchronized(this.currentState) {
             this.currentState = this.data.state
@@ -169,8 +176,16 @@ class AlarmFragment : Fragment() {
     private fun createArmDialog(homeAction: () -> Unit, awayAction: () -> Unit): AlertDialog {
         val armLayout = View.inflate(context, R.layout.arm_layout, null)
         val grid = armLayout.findViewById<GridLayout>(R.id.arm_alternatives)
-        val homeView = createArmEntry(R.drawable.ic_lock_circle_closed_yellow, R.string.alarm_arm_home, R.color.alarm_yellow)
-        val awayView = createArmEntry(R.drawable.ic_lock_circle_closed_red, R.string.alarm_arm_away, R.color.alarm_red)
+        val homeView = createArmEntry(
+            R.drawable.ic_lock_circle_closed_yellow,
+            R.string.alarm_arm_home,
+            R.color.alarm_yellow
+        )
+        val awayView = createArmEntry(
+            R.drawable.ic_lock_circle_closed_red,
+            R.string.alarm_arm_away,
+            R.color.alarm_red
+        )
         grid.addView(homeView)
         grid.addView(awayView)
         val adb = AlertDialog.Builder(this@AlarmFragment.requireContext())
@@ -239,7 +254,7 @@ class AlarmFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        activity?.window?.decorView?.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE)
+        activity?.window?.decorView?.systemUiVisibility = Flags.HIDE_NAVBAR_AND_STATUSBAR
     }
 
     override fun onPause() {
@@ -249,14 +264,14 @@ class AlarmFragment : Fragment() {
 
     fun arm(home: Boolean, code: Int) {
         when(home) {
-            true -> hac.queueRequest(Client.CallServiceMessage("alarm_control_panel", "alarm_arm_home").setServiceData(ServiceData().setEntityId(this.data.entityId).setCode(code)), ServerCallback { it: ResultMessage -> })
-            false -> hac.queueRequest(Client.CallServiceMessage("alarm_control_panel", "alarm_arm_away").setServiceData(ServiceData().setEntityId(this.data.entityId).setCode(code)), ServerCallback { it: ResultMessage ->  })
+            true -> hac.queueRequest(Client.CallServiceMessage("alarm_control_panel", "alarm_arm_home").setServiceData(ServiceData().add("entity_id", this.data.entityId).add("code", code)), ServerCallback { it: ResultMessage -> })
+            false -> hac.queueRequest(Client.CallServiceMessage("alarm_control_panel", "alarm_arm_away").setServiceData(ServiceData().add("entity_id", this.data.entityId).add("code", code)), ServerCallback { it: ResultMessage ->  })
         }
     }
 
     fun disarm(code: Int) {
         Log.d("disarm", this.data.entityId)
-        hac.queueRequest(Client.CallServiceMessage("alarm_control_panel", "alarm_disarm").setServiceData(ServiceData().setEntityId(this.data.entityId).setCode(code)), ServerCallback { it: ResultMessage ->  })
+        hac.queueRequest(Client.CallServiceMessage("alarm_control_panel", "alarm_disarm").setServiceData(ServiceData().add("entity_id", this.data.entityId).add("code", code)), ServerCallback { it: ResultMessage ->  })
     }
 
     companion object {

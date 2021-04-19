@@ -6,50 +6,23 @@ import android.net.Uri
 import android.util.Log
 import android.view.TextureView
 import android.widget.ProgressBar
-import androidx.preference.PreferenceManager
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
-import java.util.*
+import se.payerl.alarmanddoorbellcontroller.datatypes.CameraPreference
 import kotlin.collections.ArrayList
 
-class VideoHandler(context: Context): MediaPlayer.EventListener {
+class VideoHandler(context: Context, private val camera: CameraPreference): MediaPlayer.EventListener {
     private val mLibVlc: LibVLC
     private val mMediaPlayer: MediaPlayer
-    private val callbacks: MutableList<BitmapCallback> = mutableListOf<BitmapCallback>()
-    private val clients: MutableList<VideoClient> = mutableListOf<VideoClient>()
+    private val callbacks: MutableList<(bitmap: Bitmap) -> Unit> = mutableListOf()
+    private val clients: MutableList<VideoClient> = mutableListOf()
 
     init {
         var args = ArrayList<String>()
-        if(PreferenceManager.getDefaultSharedPreferences(context.applicationContext).contains(
-                context.applicationContext.resources.getString(
-                    R.string.settings_video_username
-                )
-            )) {
-            args.add(
-                "--rtsp-user=${
-                    PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-                        .getString(
-                            context.applicationContext.resources.getString(R.string.settings_video_username),
-                            ""
-                        )
-                }"
-            )
-        }
-        if(PreferenceManager.getDefaultSharedPreferences(context.applicationContext).contains(
-                context.applicationContext.resources.getString(
-                    R.string.settings_video_password
-                )
-            )) {
-            args.add(
-                "--rtsp-pwd=${
-                    PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-                        .getString(
-                            context.applicationContext.resources.getString(R.string.settings_video_password),
-                            ""
-                        )
-                }"
-            )
+        if(camera.requireCredentials()) {
+            args.add("--rtsp-user=${camera.getUsername()}")
+            args.add("--rtsp-pwd=${camera.getPassword()}")
         }
         mLibVlc = LibVLC(context.applicationContext, args)
         mMediaPlayer = MediaPlayer(mLibVlc)
@@ -85,7 +58,7 @@ class VideoHandler(context: Context): MediaPlayer.EventListener {
         mMedia.release()
     }
 
-    fun addThumbnailListener(callback: BitmapCallback, textureView: TextureView, url: String): VideoHandler {
+    fun addThumbnailListener(callback: (bitmap: Bitmap) -> Unit, textureView: TextureView, url: String): VideoHandler {
         synchronized(this.callbacks) {
             this.callbacks.add(callback)
             this.mMediaPlayer.setEventListener(this)
@@ -105,17 +78,20 @@ class VideoHandler(context: Context): MediaPlayer.EventListener {
     }
 
     private fun switchTo(client: VideoClient) {
+        Log.e("Camera", "switching")
+        this.mMediaPlayer.stop()
         this.mMediaPlayer.vlcVout.detachViews()
         val vout = this.mMediaPlayer.vlcVout
         vout.setVideoView(client.view)
         vout.setWindowSize(client.width, client.height)
         vout.attachViews()
+        this.mMediaPlayer.play()
     }
 
     fun show(width: Int, height: Int, view: TextureView, url: String, progressBar: ProgressBar?) {
-        mMediaPlayer.stop()
         synchronized(this.clients) {
             this.clients.add(VideoClient(width, height, view, progressBar))
+            Log.e("Camera", "Attached: ${this.mMediaPlayer.vlcVout.areViewsAttached()}, Queue: ${this.clients.size}")
             if(this.mMediaPlayer.vlcVout.areViewsAttached()) {
                 switchTo(this.clients.last())
             } else {
@@ -124,15 +100,16 @@ class VideoHandler(context: Context): MediaPlayer.EventListener {
         }
 
         mMediaPlayer.setEventListener(this)
-        mMediaPlayer.play()
+//        mMediaPlayer.play()
     }
 
     fun stop() {
         synchronized(this.clients) {
-            this.clients.removeAt(this.clients.size - 1)
-            if(this.clients.isNotEmpty()) {
-                switchTo(this.clients.last())
+            if(this.clients.size > 1) {
+                this.clients.removeAt(this.clients.size - 1)
+                switchTo(this.clients.get(this.clients.size - 1))
             } else {
+                this.clients.clear()
                 mMediaPlayer.stop()
             }
         }
@@ -143,17 +120,23 @@ class VideoHandler(context: Context): MediaPlayer.EventListener {
         mLibVlc.release()
     }
 
-    override fun onEvent(event: MediaPlayer.Event?) {
-        if(this.clients.isNotEmpty()) {
-            if (!isOneColor(this.clients.last().view.bitmap)) {
-                this.clients.last().progressBar?.visibility = ProgressBar.GONE
-                synchronized(this.callbacks) {
-                    Log.v("callbacks", "contains ${this.callbacks.size} callbacks")
-                    while (this.callbacks.isNotEmpty()) {
-                        Log.v("callback", "sending to callback")
-                        this.callbacks.removeAt(0).newFrame(this.clients.last().view.bitmap)
+    override fun onEvent(event: MediaPlayer.Event) {
+        if(event.type == MediaPlayer.Event.Playing) {
+            Log.e("Camera", "playing")
+        }
+        synchronized(this.clients) {
+            if(this.clients.isNotEmpty()) {
+                val current = this.clients.last()
+                if (!isOneColor(current.view.bitmap)) {
+                    current.progressBar?.visibility = ProgressBar.GONE
+                    synchronized(this.callbacks) {
+                        Log.v("callbacks", "contains ${this.callbacks.size} callbacks")
+                        while (this.callbacks.isNotEmpty()) {
+                            Log.v("callback", "sending to callback")
+                            this.callbacks.removeAt(0).invoke(current.view.bitmap)
+                        }
+                        this.mMediaPlayer.setEventListener(null)
                     }
-                    this.mMediaPlayer.setEventListener(null)
                 }
             }
         }

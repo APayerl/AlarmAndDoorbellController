@@ -1,49 +1,62 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory app:title="@string/preference_category_home_assistant">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/preference_category_home_assistant">
         <EditTextPreference
+            app:defaultValue="ws://homeassistant.local:8123/api/websocket"
             app:key="@string/settings_home_assistant_ws_url"
-            app:title="@string/preference_home_assistant_ws_url_title"
             app:summary="@string/preference_home_assistant_ws_url_summary"
-            app:defaultValue="ws://homeassistant.local:8123/api/websocket" />
+            app:title="@string/preference_home_assistant_ws_url_title" />
         <EditTextPreference
+            app:defaultValue=""
             app:key="@string/settings_home_assistant_token"
-            app:title="@string/preference_home_assistant_token_title"
             app:summary="@string/preference_home_assistant_token_summary"
-            app:defaultValue="" />
+            app:title="@string/preference_home_assistant_token_title" />
     </PreferenceCategory>
-    <PreferenceCategory app:key="cameras"
-        app:allowDividerAbove="true"
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Overcharge prevention" >
+        <SwitchPreference
+            app:defaultValue="false"
+            app:key="overcharge_protection_enabled"
+            app:title="Active"
+            app:persistent="true"
+            app:summaryOn="Will turn off charging when threshold is reached"
+            app:summaryOff="Ignores battery and charging state" />
+        <DropDownPreference
+            app:dependency="overcharge_protection_enabled"
+            app:key="overcharge_protection_entity"
+            app:persistent="true"
+            android:enabled="false"
+            app:title="Switch Entity"
+            app:summary="The entity to turn on and off" />
+        <SeekBarPreference
+            app:dependency="overcharge_protection_enabled"
+            app:persistent="true"
+            android:min="1"
+            android:max="100"
+            app:defaultValue="30"
+            app:title="Minimum charge"
+            app:summary="When should charging start"
+            app:showSeekBarValue="true"
+            app:key="overcharge_protection_min" />
+        <SeekBarPreference
+            app:dependency="overcharge_protection_enabled"
+            app:persistent="true"
+            android:min="1"
+            android:max="100"
+            app:defaultValue="99"
+            app:title="Maximum charge"
+            app:summary="When should charging stop"
+            app:showSeekBarValue="true"
+            app:key="overcharge_protection_max" />
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="cameras"
         app:title="@string/preference_category_doorbell">
 
-        <PreferenceCategory
-            app:key="camera"
-            app:title="Camera">
-
-            <SwitchPreference
-                app:key="camera.doorbellEnabled"
-                app:title="@string/preference_doorbell_enabled"
-                app:defaultValue="true" />
-            <EditTextPreference
-                app:dependency="camera.doorbellEnabled"
-                app:key="camera.@string/settings_video_url"
-                app:title="@string/preference_url_field_title"
-                app:summary="@string/preference_url_field_summary"
-                app:defaultValue="" />
-            <SwitchPreference
-                app:dependency="camera.doorbellEnabled"
-                app:key="camera.authenticationRequired"
-                app:title="Authentication required"
-                app:defaultValue="true" />
-            <EditTextPreference
-                app:dependency="camera.authenticationRequired"
-                app:key="camera.username"
-                app:title="@string/preference_username_field_title"
-                app:defaultValue="admin" />
-            <EditTextPreference
-                app:dependency="camera.authenticationRequired"
-                app:key="camera.password"
-                app:title="@string/preference_password_field_title"
-                app:defaultValue="admin" />
-        </PreferenceCategory>
     </PreferenceCategory>
 </PreferenceScreen>

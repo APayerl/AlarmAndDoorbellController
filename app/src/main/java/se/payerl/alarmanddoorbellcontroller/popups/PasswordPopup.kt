@@ -6,11 +6,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import se.payerl.alarmanddoorbellcontroller.R
+import se.payerl.alarmanddoorbellcontroller.datatypes.Flags
 
-class PasswordPopup(context: Context, title: String, codes: List<String>) {
+class PasswordPopup(context: Context, title: String, private val codes: List<String>) {
     private var dialog: AlertDialog
     private var code: String
-    private val codes: List<String> = codes
     private val pinViewPasswordField: AppCompatTextView
     private val baseView: View = View.inflate(context, R.layout.pin_layout, null)
 
@@ -25,6 +25,8 @@ class PasswordPopup(context: Context, title: String, codes: List<String>) {
         code = ""
         dialog = builder.create()
         dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        dialog.window?.decorView?.systemUiVisibility = Flags.HIDE_NAVBAR_AND_STATUSBAR
+
         baseView.findViewById<AppCompatButton>(R.id.pinViewBtn0).setOnClickListener {
             numberButtonPressed(it)
         }
